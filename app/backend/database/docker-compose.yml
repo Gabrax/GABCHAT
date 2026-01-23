@@ -1,0 +1,42 @@
+services:
+  mysql:
+    image: mysql:8.1
+    container_name: mysql-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: StrongPass123!
+      MYSQL_DATABASE: chatdb
+      MYSQL_USER: chatuser
+      MYSQL_PASSWORD: chatpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./database/mysql_dump.sql:/docker-entrypoint-initdb.d/mysql_dump.sql:ro
+
+  redis:
+    image: redis:7
+    container_name: redis-cache
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+    # AUTO-RESTORE
+    volumes:
+      - redis-data:/data
+      - ./database:/backup
+
+    command: >
+      sh -c "
+      if [ -f /backup/redis_dump.rdb ]; then
+        echo '[Redis] Restoring dump from /backup...';
+        cp /backup/redis_dump.rdb /data/dump.rdb;
+      else
+        echo '[Redis] No dump found, starting empty';
+      fi;
+      redis-server --save 60 1 --loglevel warning
+      "
+
+volumes:
+  mysql-data:
+  redis-data:
