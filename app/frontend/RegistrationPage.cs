@@ -16,7 +16,7 @@ public class RegistrationPage : ContentPage
     private Border PasswordBorder;
     private Label PasswordErrorLabel;
 
-    private Button LoginButton;
+    private Button SignUpButton;
     private Button BackButton;
 
     private VerticalStackLayout MainLayout;
@@ -145,8 +145,15 @@ public class RegistrationPage : ContentPage
             TextColor = Colors.White,
             FontAttributes = FontAttributes.Bold
         };
+        BackButton.Clicked += async (s, e) =>
+        {
+            await Navigation.PopAsync();
+        };
+#if WINDOWS
+            BackButton.EnableHoverCursor(CursorIcon.Hand);
+#endif
 
-        LoginButton = new Button
+        SignUpButton = new Button
         {
             WidthRequest = 200,
             HeightRequest = 55,
@@ -156,12 +163,20 @@ public class RegistrationPage : ContentPage
             TextColor = Colors.White,
             FontAttributes = FontAttributes.Bold
         };
-        //LoginButton.Clicked += OnLoginClicked;
+        SignUpButton.Clicked += async (s, e) =>
+        {
+            SignUpButton.Text = "Account created successfully!";
+            await Task.Delay(1000);
+            await Navigation.PushAsync(new ChatPage());
+        };
+#if WINDOWS
+            SignUpButton.EnableHoverCursor(CursorIcon.Hand);
+#endif
 
         var buttonLayout = new HorizontalStackLayout
         {
             HorizontalOptions = LayoutOptions.Center,
-            Children = { BackButton, LoginButton }
+            Children = { BackButton, SignUpButton }
         };
 
         MainLayout = new VerticalStackLayout

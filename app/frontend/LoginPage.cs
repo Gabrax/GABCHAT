@@ -109,29 +109,26 @@ namespace frontend
                 FontAttributes = FontAttributes.Bold
             };
             LoginButton.Clicked += OnLoginClicked;
-
-            var signUpSpan = new Span
-            {
-                Text = "Sign up here",
-                TextColor = Colors.FloralWhite,
-                TextDecorations = TextDecorations.Underline
-            };
-            signUpSpan.GestureRecognizers.Add(new TapGestureRecognizer
-            {
-                Command = new Command((obj) => OnSignUpTapped(obj, EventArgs.Empty))
-            });
-
-            var formattedString = new FormattedString();
-            formattedString.Spans.Add(new Span { Text = "New user? " });
-            formattedString.Spans.Add(signUpSpan);
+#if WINDOWS
+            LoginButton.EnableHoverCursor(CursorIcon.Hand);
+#endif
 
             NewUserLabel = new Label
             {
+                Text = "New user? Sign up here",
                 FontSize = 12,
                 HorizontalOptions = LayoutOptions.Center,
-                Margin = new Thickness(6, 0, 0, 0),
-                FormattedText = formattedString
+                TextColor = Colors.FloralWhite,
+                TextDecorations = TextDecorations.Underline
             };
+
+            var tapGesture = new TapGestureRecognizer();
+            tapGesture.Tapped += OnSignUpTapped;
+            NewUserLabel.GestureRecognizers.Add(tapGesture);
+#if WINDOWS
+            NewUserLabel.EnableHoverCursor(CursorIcon.Hand);
+#endif
+
 
             MainLayout = new VerticalStackLayout
             {
@@ -215,9 +212,9 @@ namespace frontend
             return isValid;
         }
 
-        private async void OnSignUpTapped(object sender, EventArgs e)
+        private async void OnSignUpTapped(object? sender, TappedEventArgs e)
         {
-            await Shell.Current.GoToAsync(nameof(RegistrationPage));
+            await Navigation.PushAsync(new RegistrationPage());
         }
 
         private async void OnLoginClicked(object? sender, EventArgs e)

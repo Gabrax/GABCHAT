@@ -34,7 +34,27 @@ namespace frontend
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new AppShell());
+            var window = new Window(new AppShell());
+
+#if WINDOWS
+            window.Width = 1000;
+            window.Height = 800;
+
+            var displayInfo = DeviceDisplay.Current.MainDisplayInfo;
+            window.X = (displayInfo.Width / displayInfo.Density  - window.Width) / 2;
+            window.Y = (displayInfo.Height / displayInfo.Density - window.Height) / 2;
+
+            if (window != null)
+            {
+                window.MinimumWidth = window.Width;
+                window.MinimumHeight = window.Height;
+
+                //window.MaximumWidth = 1200;
+                //window.MaximumHeight = 800;
+            }
+#endif
+
+            return window ?? new Window(new AppShell());
         }
     }
 }
