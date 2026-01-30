@@ -1,3 +1,5 @@
+using Microsoft.Maui.Controls.Shapes;
+
 namespace frontend;
 
 public class ChatPage : ContentPage
@@ -62,12 +64,15 @@ public class ChatPage : ContentPage
                 };
                 name.SetBinding(Label.TextProperty, ".");
 
-                return new Frame
+                return new Border
                 {
+                    StrokeShape = new RoundRectangle
+                    {
+                        CornerRadius = 10
+                    },
+                    BackgroundColor = Color.FromArgb("#1E1E1E"),
                     Padding = 12,
                     Margin = new Thickness(6, 4),
-                    CornerRadius = 10,
-                    BackgroundColor = Color.FromArgb("#1E1E1E"),
                     Content = name
                 };
             })
@@ -194,9 +199,12 @@ public class ChatPage : ContentPage
 
     void AddMessage(string author, string text)
     {
-        messagesLayout.Children.Add(new Frame
+        messagesLayout.Children.Add(new Border
         {
-            CornerRadius = 12,
+            StrokeShape = new RoundRectangle
+            {
+                CornerRadius = 12
+            },
             Padding = 10,
             BackgroundColor = author == "You"
                 ? Color.FromArgb("#4F46E5")

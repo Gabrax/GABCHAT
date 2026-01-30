@@ -167,6 +167,14 @@ public class RegistrationPage : ContentPage
         {
             SignUpButton.Text = "Account created successfully!";
             await Task.Delay(1000);
+
+            bool success = await AuthClient.Register(UserNameEntry.Text,EmailEntry.Text,PasswordEntry.Text);
+            if (!success)
+            {
+                await DisplayAlertAsync("Error", "Registration failed", "OK");
+                return;
+            }
+
             await Navigation.PushAsync(new ChatPage());
         };
 #if WINDOWS

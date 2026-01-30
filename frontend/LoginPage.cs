@@ -1,6 +1,8 @@
-using Microsoft.Maui.Controls;
+using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls.Shapes;
 using System.Text.RegularExpressions;
+using Microsoft.Maui.Storage;
+using Path = System.IO.Path;
 
 namespace frontend
 {
@@ -20,13 +22,12 @@ namespace frontend
 
         public LoginPage()
         {
+
             Shell.SetBackButtonBehavior(this, new BackButtonBehavior
             {
                 IsVisible = false,
                 IsEnabled = false
             });
-
-            BackgroundColor = Color.FromArgb("#121212");
 
             // EMAIL
             EmailEntry = new Entry
@@ -135,7 +136,7 @@ namespace frontend
                 Padding = 30,
                 Spacing = 20,
                 VerticalOptions = LayoutOptions.Center,
-                Opacity = 0,
+                Opacity = 1,
                 TranslationY = 40,
                 Children =
                 {
@@ -160,7 +161,39 @@ namespace frontend
                 }
             };
 
-            Content = MainLayout;
+            var backgroundVideo = new MediaElement
+            {
+                ShouldAutoPlay = true,
+                ShouldLoopPlayback = true,
+                ShouldShowPlaybackControls = true,
+                Aspect = Aspect.AspectFill,
+                Volume = 0,
+                HorizontalOptions = LayoutOptions.Fill,
+                VerticalOptions = LayoutOptions.Fill
+            };
+
+            Content = new Grid
+            {
+                Children =
+                {
+                    backgroundVideo,
+                    MainLayout
+                }
+            };
+
+            Loaded += async (_, __) =>
+            {
+                var stream = await FileSystem.OpenAppPackageFileAsync("background.mp4");
+
+                var filePath = Path.Combine(FileSystem.CacheDirectory, "background.mp4");
+
+                using (var fileStream = File.Create(filePath))
+                    await stream.CopyToAsync(fileStream);
+
+                backgroundVideo.Source = MediaSource.FromUri(filePath);
+
+                backgroundVideo.Play();
+            };
         }
 
         protected override async void OnAppearing()
