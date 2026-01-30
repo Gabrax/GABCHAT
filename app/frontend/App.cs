@@ -1,4 +1,5 @@
-using Microsoft.Maui.Controls;
+using Microsoft.Extensions.Configuration;
+using System.Reflection;
 
 namespace frontend
 {
@@ -30,12 +31,26 @@ namespace frontend
                     new Setter { Property = Label.TextColorProperty, Value = Colors.Gray }
                 }
             });
+
+            InitializeAsync().GetAwaiter().GetResult();
+        }
+
+        private static async Task InitializeAsync()
+        { 
+            var config = new ConfigurationBuilder()
+                .AddJsonStream(await FileSystem.OpenAppPackageFileAsync("appsettings.json"))
+                .Build();
+
+            var baseUrl = config["HTTPS_URL"];
+            if (string.IsNullOrWhiteSpace(baseUrl))
+                throw new InvalidOperationException("No HTTPS_URL set in appsettings.json.");
+
+            BaseClient.Initialize(baseUrl: baseUrl);
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            var window = new Window(new AppShell());
-
+            Window window = new Window(new AppShell());
 #if WINDOWS
             window.Width = 1000;
             window.Height = 800;
@@ -53,7 +68,6 @@ namespace frontend
                 //window.MaximumHeight = 800;
             }
 #endif
-
             return window ?? new Window(new AppShell());
         }
     }

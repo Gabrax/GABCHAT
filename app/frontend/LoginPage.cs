@@ -241,10 +241,16 @@ namespace frontend
 
             await Task.Delay(1200);
 
-            LoginButton.Text = "Login";
-            LoginButton.IsEnabled = true;
+            User? user = await AuthClient.Login(EmailEntry.Text, PasswordEntry.Text);
+            if (user == null)
+            {
+                await DisplayAlertAsync("Error", "Invalid credentials", "OK");
+                LoginButton.Text = "Login";
+                LoginButton.IsEnabled = true;
+                return;
+            }
 
-            await DisplayAlertAsync("Success", "Logged in!", "OK");
+            await DisplayAlertAsync("Success", $"Welcome, {user.username}!", "OK");
         }
     }
 }
