@@ -13,6 +13,7 @@ namespace frontend
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddFont("BigBlueTermPlusNerdFont-Regular.ttf", "Retro");
             });
 #if ANDROID || IOS || MACCATALYST || TIZEN || WINDOWS
             // Ogranicz wywołanie do obsługiwanych platform

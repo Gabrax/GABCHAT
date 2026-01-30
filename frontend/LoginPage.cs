@@ -15,6 +15,7 @@ namespace frontend
         private Entry PasswordEntry;
         private Border PasswordBorder;
         private Label PasswordErrorLabel;
+        private Label ResetPasswordLabel;
 
         private Button LoginButton;
         private Label NewUserLabel;
@@ -35,6 +36,7 @@ namespace frontend
                 Placeholder = "Email",
                 Keyboard = Keyboard.Email,
                 TextColor = Colors.White,
+                FontFamily = "Retro",
                 PlaceholderColor = Color.FromArgb("#888"),
                 BackgroundColor = Colors.Transparent
             };
@@ -53,6 +55,7 @@ namespace frontend
                 Text = "Invalid email address",
                 TextColor = Color.FromArgb("#FF4D4F"),
                 FontSize = 12,
+                FontFamily = "Retro",
                 IsVisible = false,
                 Margin = new Thickness(6, 0, 0, 0),
                 HorizontalOptions = LayoutOptions.Center
@@ -70,6 +73,7 @@ namespace frontend
                 Placeholder = "Password",
                 IsPassword = true,
                 TextColor = Colors.White,
+                FontFamily = "Retro",
                 PlaceholderColor = Color.FromArgb("#888"),
                 BackgroundColor = Colors.Transparent
             };
@@ -87,6 +91,7 @@ namespace frontend
             {
                 TextColor = Color.FromArgb("#FF4D4F"),
                 FontSize = 12,
+                FontFamily = "Retro",
                 IsVisible = false,
                 Margin = new Thickness(6, 0, 0, 0),
                 HorizontalOptions = LayoutOptions.Center
@@ -104,6 +109,7 @@ namespace frontend
                 WidthRequest = 200,
                 HeightRequest = 55,
                 Text = "Login",
+                FontFamily = "Retro",
                 CornerRadius = 14,
                 BackgroundColor = Color.FromArgb("#4F46E5"),
                 TextColor = Colors.White,
@@ -114,9 +120,23 @@ namespace frontend
             LoginButton.EnableHoverCursor(CursorIcon.Hand);
 #endif
 
+            ResetPasswordLabel = new Label
+            {
+                Text = "Forgot password? Reset here",
+                FontFamily = "Retro",
+                FontSize = 12,
+                HorizontalOptions = LayoutOptions.Center,
+                TextColor = Colors.FloralWhite,
+                TextDecorations = TextDecorations.Underline
+            };
+#if WINDOWS
+            ResetPasswordLabel.EnableHoverCursor(CursorIcon.Hand);
+#endif
+
             NewUserLabel = new Label
             {
                 Text = "New user? Sign up here",
+                FontFamily = "Retro",
                 FontSize = 12,
                 HorizontalOptions = LayoutOptions.Center,
                 TextColor = Colors.FloralWhite,
@@ -140,16 +160,17 @@ namespace frontend
                 TranslationY = 40,
                 Children =
                 {
-                    new Image
-                    {
-                        Source = "dotnet_bot.png",
-                        HeightRequest = 120,
-                        HorizontalOptions = LayoutOptions.Center
-                    },
+                    //new Image
+                    //{
+                    //    Source = "dotnet_bot.png",
+                    //    HeightRequest = 120,
+                    //    HorizontalOptions = LayoutOptions.Center
+                    //},
                     new Label
                     {
                         Text = "GABCHAT",
-                        FontSize = 28,
+                        FontFamily = "Retro",
+                        FontSize = 38,
                         FontAttributes = FontAttributes.Bold,
                         TextColor = Colors.White,
                         HorizontalOptions = LayoutOptions.Center
@@ -157,6 +178,7 @@ namespace frontend
                     emailLayout,
                     passwordLayout,
                     LoginButton,
+                    ResetPasswordLabel,
                     NewUserLabel
                 }
             };
@@ -165,7 +187,7 @@ namespace frontend
             {
                 ShouldAutoPlay = true,
                 ShouldLoopPlayback = true,
-                ShouldShowPlaybackControls = true,
+                ShouldShowPlaybackControls = false,
                 Aspect = Aspect.AspectFill,
                 Volume = 0,
                 HorizontalOptions = LayoutOptions.Fill,

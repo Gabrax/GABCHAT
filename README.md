@@ -8,6 +8,7 @@
 
 <p>
 <a href="https://dotnet.microsoft.com/en-us/apps/maui">.NET MAUI</a> •
+<a href="https://www.nuget.org/packages/CommunityToolkit.Maui/14.0.0?_src=template">CommunityToolkit.Maui</a> •
 <a href="https://dotnet.microsoft.com/en-us/apps/aspnet/apis">ASP.NET Web API</a> •
 <a href="https://www.nuget.org/packages/Microsoft.AspNetCore.OpenApi/10.0.2?_src=template">Microsoft.AspNetCore.OpenApi</a> •
 <a href="https://scalar.com/products/api-references/integrations/aspnetcore/integration">Scalar.AspNetCore</a> •
