@@ -7,12 +7,12 @@ namespace frontend
     {
         public App()
         {
-            Resources = new ResourceDictionary();
-
-            Resources.Add("PrimaryColor", Color.FromArgb("#4F46E5"));
-            Resources.Add("SecondaryColor", Color.FromArgb("#888"));
-            Resources.Add("ErrorColor", Color.FromArgb("#FF4D4F"));
-            Resources.Add("DefaultFontFamily", "Retro");
+            Resources = new ResourceDictionary
+            {
+                { "PrimaryColor", Color.FromArgb("#4F46E5") },
+                { "SecondaryColor", Color.FromArgb("#888") },
+                { "ErrorColor", Color.FromArgb("#FF4D4F") },
+            };
 
             InitializeAsync().GetAwaiter().GetResult();
         }
