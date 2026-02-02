@@ -71,7 +71,7 @@ namespace frontend
 
         private VerticalStackLayout CreateLoginLayout()
         {
-            Entry _loginEmailEntry = new Entry { Placeholder = "Email", TextColor = Colors.White, FontFamily = "Retro", BackgroundColor = Colors.Transparent };
+            Entry _loginEmailEntry = new Entry { Placeholder = "Email", Keyboard = Keyboard.Email, IsSpellCheckEnabled = false, TextColor = Colors.White, FontFamily = "Retro", BackgroundColor = Colors.Transparent };
             Border _loginEmailBorder = new Border { WidthRequest = 200, BackgroundColor = Color.FromArgb("#1E1E1E"), StrokeShape = new RoundRectangle { CornerRadius = 14 }, Padding = 14, Content = _loginEmailEntry };
             Label _loginEmailErrorLabel = new Label { Text = "Invalid email format", FontFamily = "Retro", TextColor = Color.FromArgb("#FF4D4F"), FontSize = 12, IsVisible = false, Margin = new Thickness(6, 0, 0, 0), HorizontalOptions = LayoutOptions.Center };
             VerticalStackLayout _loginEmailLayout = new VerticalStackLayout { Spacing = 4, Children = { _loginEmailBorder, _loginEmailErrorLabel } };
