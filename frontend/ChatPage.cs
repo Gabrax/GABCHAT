@@ -24,26 +24,73 @@ public class ChatPage : ContentPage
 
         var avatar = new Image
         {
-            Source = "dotnet_bot.png",
-            HeightRequest = 48,
-            WidthRequest = 48,
+            Source = "default_avatar.jpg",
+            HeightRequest = 38,
+            WidthRequest = 38,
             Aspect = Aspect.AspectFill
         };
 
         var username = new Label
         {
             Text = "Gab",
+            FontFamily = "Retro",
             TextColor = Colors.White,
             FontAttributes = FontAttributes.Bold,
             VerticalOptions = LayoutOptions.Center
         };
 
-        var profileRow = new HorizontalStackLayout
+        var optionsButton = new ImageButton
         {
-            Spacing = 12,
-            Padding = 12,
-            Children = { avatar, username }
+            Source = "options.png",
+            HeightRequest = 24,
+            WidthRequest = 24,
+            BackgroundColor = Colors.Transparent,
+            VerticalOptions = LayoutOptions.Center
         };
+
+        var menuFlyout = new MenuFlyout();
+        menuFlyout.Add(new MenuFlyoutItem
+        {
+            Text = "Logout",
+            Command = new Command(async () =>
+            {
+                await Shell.Current.GoToAsync("///MainPage");
+            })
+        });
+
+        FlyoutBase.SetContextFlyout(optionsButton, menuFlyout);
+
+        optionsButton.Clicked += async (_, __) =>
+        {
+            string action = await DisplayActionSheetAsync(
+                "Options",
+                "Cancel",
+                null,
+                "Logout"
+            );
+
+            if (action == "Logout")
+            {
+                await Shell.Current.GoToAsync("///MainPage");
+            }
+        };
+
+        var profileRow = new Grid
+        {
+            Padding = 12,
+            ColumnSpacing = 12,
+            IsClippedToBounds = true,
+            ColumnDefinitions =
+            {
+                new ColumnDefinition { Width = GridLength.Auto }, // avatar
+                new ColumnDefinition { Width = GridLength.Star }, // username
+                new ColumnDefinition { Width = GridLength.Auto }  // options
+            }
+        };
+
+        profileRow.Add(avatar, 0, 0);
+        profileRow.Add(username, 1, 0);
+        profileRow.Add(optionsButton, 2, 0);
 
         conversationsList = new CollectionView
         {
@@ -60,6 +107,7 @@ public class ChatPage : ContentPage
                 var name = new Label
                 {
                     TextColor = Colors.White,
+                    FontFamily = "Retro",
                     FontSize = 14
                 };
                 name.SetBinding(Label.TextProperty, ".");
@@ -99,6 +147,7 @@ public class ChatPage : ContentPage
         chatTitle = new Label
         {
             Text = "Select a conversation",
+            FontFamily = "Retro",
             TextColor = Colors.White,
             FontAttributes = FontAttributes.Bold,
             FontSize = 18,
@@ -119,6 +168,7 @@ public class ChatPage : ContentPage
         var messageEntry = new Entry
         {
             Placeholder = "Type a message...",
+            FontFamily = "Retro",
             TextColor = Colors.White,
             PlaceholderColor = Colors.Gray,
             BackgroundColor = Color.FromArgb("#1E1E1E")
@@ -127,6 +177,7 @@ public class ChatPage : ContentPage
         var sendButton = new Button
         {
             Text = "Send",
+            FontFamily = "Retro",
             BackgroundColor = Color.FromArgb("#4F46E5"),
             TextColor = Colors.White
         };
@@ -212,7 +263,8 @@ public class ChatPage : ContentPage
             Content = new Label
             {
                 Text = $"{author}: {text}",
-                TextColor = Colors.White
+                TextColor = Colors.White,
+                FontFamily = "Retro",
             }
         });
     }

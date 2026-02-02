@@ -81,13 +81,17 @@ namespace frontend
             Label _loginPasswordErrorLabel = new Label { Text = "Invalid password format.", FontFamily = "Retro", TextColor = Color.FromArgb("#FF4D4F"), FontSize = 12, IsVisible = false, Margin = new Thickness(6, 0, 0, 0), HorizontalOptions = LayoutOptions.Center };
             VerticalStackLayout _loginPasswordLayout = new VerticalStackLayout { Spacing = 4, Children = { _loginPasswordBorder, _loginPasswordErrorLabel } };
 
-            Button _loginButton = new Button { Text = "Login", BackgroundColor = Color.FromArgb("#4F46E5"), FontFamily = "Retro", TextColor = Colors.White, CornerRadius = 14, WidthRequest = 200, HeightRequest = 55 };
+            ImageButton _loginButton = new ImageButton { Source = "enter.png", WidthRequest = 50, HeightRequest = 50, HorizontalOptions = LayoutOptions.Center };
             _loginButton.Clicked += async (s, e) =>
             {
                 if (_loginButton == null) return;
 
-                await _loginButton.ScaleToAsync(0.95, 80);
-                await _loginButton.ScaleToAsync(1, 80);
+                //await _loginButton.ScaleToAsync(0.95, 80);
+                //await _loginButton.ScaleToAsync(1, 80);
+
+                _loginButton.Source = "enter_pressed.png";
+                await Task.Delay(500);
+                _loginButton.Source = "enter.png";
 
                 bool isEmailValid = IsEmailValid(_loginEmailEntry?.Text ?? string.Empty, _loginEmailBorder, _loginEmailErrorLabel);
                 bool isPasswordValid = IsPasswordlValid(_loginPasswordEntry?.Text ?? string.Empty, _loginPasswordBorder, _loginPasswordErrorLabel);
@@ -103,7 +107,6 @@ namespace frontend
                     return;
                 }
 
-                _loginButton.Text = "Logging in...";
                 _loginButton.IsEnabled = false;
 
                 await Task.Delay(1200);
@@ -118,6 +121,14 @@ namespace frontend
                 //}
 
                 //await DisplayAlertAsync("Success", $"Welcome, {user.username}!", "OK");
+                await Navigation.PushAsync(new ChatPage());
+
+                _loginEmailEntry?.Text = string.Empty;
+                _loginEmailBorder.Stroke = Colors.Transparent;
+                _loginPasswordEntry?.Text = string.Empty;
+                _loginPasswordBorder.Stroke = Colors.Transparent;
+                _loginButton.IsEnabled = true;
+
             };
 
             Label _loginPasswordResetLabel = new Label { Text = "Forgot password? Reset here", FontSize = 12, FontFamily = "Retro", TextColor = Colors.FloralWhite, HorizontalOptions = LayoutOptions.Center, TextDecorations = TextDecorations.Underline };
@@ -209,7 +220,7 @@ namespace frontend
             Label _signUpPasswordErrorLabel = new Label { Text = "Password must be at least 8 characters long and include an uppercase letter, a digit, and a special character.", FontFamily = "Retro", TextColor = Color.FromArgb("#FF4D4F"), FontSize = 12, IsVisible = false, Margin = new Thickness(6, 0, 0, 0), HorizontalOptions = LayoutOptions.Center };
             VerticalStackLayout _signUpPasswordLayout = new VerticalStackLayout { Spacing = 4, Children = { _signUpPasswordBorder, _signUpPasswordErrorLabel } };
 
-            Button _signUpButton = new Button { Text = "Register", BackgroundColor = Color.FromArgb("#4F46E5"), TextColor = Colors.White, FontFamily = "Retro", CornerRadius = 14, WidthRequest = 200, HeightRequest = 55 };
+            ImageButton _signUpButton = new ImageButton { Source = "enter.png", WidthRequest = 50, HeightRequest = 50, HorizontalOptions = LayoutOptions.Center };
             _signUpButton.Clicked += async (s, e) =>
             {
                 if (_signUpButton == null) return;
@@ -236,7 +247,6 @@ namespace frontend
                     return;
                 }
 
-                _signUpButton.Text = "Account created successfully!";
                 _signUpButton.IsEnabled = false;
 
                 await Task.Delay(1200);
@@ -314,7 +324,7 @@ namespace frontend
             Label _signUpPasswordErrorLabel = new Label { Text = "Password must be at least 8 characters long and include an uppercase letter, a digit, and a special character.", FontFamily = "Retro", TextColor = Color.FromArgb("#FF4D4F"), FontSize = 12, IsVisible = false, Margin = new Thickness(6, 0, 0, 0), HorizontalOptions = LayoutOptions.Center };
             VerticalStackLayout _signUpPasswordLayout = new VerticalStackLayout { Spacing = 4, Children = { _signUpPasswordBorder, _signUpPasswordErrorLabel } };
 
-            Button _signUpButton = new Button { Text = "Reset", BackgroundColor = Color.FromArgb("#4F46E5"), TextColor = Colors.White, FontFamily = "Retro", CornerRadius = 14, WidthRequest = 200, HeightRequest = 55 };
+            ImageButton _signUpButton = new ImageButton { Source = "enter.png", WidthRequest = 50, HeightRequest = 50, HorizontalOptions = LayoutOptions.Center };
             _signUpButton.Clicked += async (s, e) =>
             {
                 if (_signUpButton == null) return;
@@ -341,7 +351,6 @@ namespace frontend
                     return;
                 }
 
-                _signUpButton.Text = "Password reset success!";
                 _signUpButton.IsEnabled = false;
 
                 await Task.Delay(1200);
