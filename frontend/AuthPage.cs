@@ -81,7 +81,7 @@ namespace frontend
             Label _loginPasswordErrorLabel = new Label { Text = "Invalid password format.", FontFamily = "Retro", TextColor = Color.FromArgb("#FF4D4F"), FontSize = 12, IsVisible = false, Margin = new Thickness(6, 0, 0, 0), HorizontalOptions = LayoutOptions.Center };
             VerticalStackLayout _loginPasswordLayout = new VerticalStackLayout { Spacing = 4, Children = { _loginPasswordBorder, _loginPasswordErrorLabel } };
 
-            ImageButton _loginButton = new ImageButton { Source = "enter.png", WidthRequest = 50, HeightRequest = 50, HorizontalOptions = LayoutOptions.Center };
+            ImageButton _loginButton = new ImageButton { Source = "right.png", WidthRequest = 50, HeightRequest = 50, HorizontalOptions = LayoutOptions.Center };
             _loginButton.Clicked += async (s, e) =>
             {
                 if (_loginButton == null) return;
@@ -89,9 +89,9 @@ namespace frontend
                 //await _loginButton.ScaleToAsync(0.95, 80);
                 //await _loginButton.ScaleToAsync(1, 80);
 
-                _loginButton.Source = "enter_pressed.png";
+                _loginButton.Source = "right_pressed.png";
                 await Task.Delay(500);
-                _loginButton.Source = "enter.png";
+                _loginButton.Source = "right.png";
 
                 bool isEmailValid = IsEmailValid(_loginEmailEntry?.Text ?? string.Empty, _loginEmailBorder, _loginEmailErrorLabel);
                 bool isPasswordValid = IsPasswordlValid(_loginPasswordEntry?.Text ?? string.Empty, _loginPasswordBorder, _loginPasswordErrorLabel);
@@ -220,18 +220,17 @@ namespace frontend
             Label _signUpPasswordErrorLabel = new Label { Text = "Password must be at least 8 characters long and include an uppercase letter, a digit, and a special character.", FontFamily = "Retro", TextColor = Color.FromArgb("#FF4D4F"), FontSize = 12, IsVisible = false, Margin = new Thickness(6, 0, 0, 0), HorizontalOptions = LayoutOptions.Center };
             VerticalStackLayout _signUpPasswordLayout = new VerticalStackLayout { Spacing = 4, Children = { _signUpPasswordBorder, _signUpPasswordErrorLabel } };
 
-            ImageButton _signUpButton = new ImageButton { Source = "enter.png", WidthRequest = 50, HeightRequest = 50, HorizontalOptions = LayoutOptions.Center };
+            ImageButton _signUpButton = new ImageButton { Source = "right.png", WidthRequest = 50, HeightRequest = 50, HorizontalOptions = LayoutOptions.Center };
             _signUpButton.Clicked += async (s, e) =>
             {
-                if (_signUpButton == null) return;
+                _signUpButton.Source = "right_pressed.png";
+                await Task.Delay(500);
+                _signUpButton.Source = "right.png";
 
                 if (_signUpUserNameEntry?.Text == null || _signUpEmailEntry?.Text == null || _signUpPasswordEntry?.Text == null)
                 {
                     return;
                 }
-
-                await _signUpButton.ScaleToAsync(0.95, 80);
-                await _signUpButton.ScaleToAsync(1, 80);
 
                 bool isEmailValid = IsEmailValid(_signUpEmailEntry?.Text ?? string.Empty, _signUpEmailBorder, _signUpEmailErrorLabel);
                 bool isPasswordValid = IsPasswordlValid(_signUpPasswordEntry?.Text ?? string.Empty, _signUpPasswordBorder, _signUpPasswordErrorLabel);
@@ -324,10 +323,12 @@ namespace frontend
             Label _signUpPasswordErrorLabel = new Label { Text = "Password must be at least 8 characters long and include an uppercase letter, a digit, and a special character.", FontFamily = "Retro", TextColor = Color.FromArgb("#FF4D4F"), FontSize = 12, IsVisible = false, Margin = new Thickness(6, 0, 0, 0), HorizontalOptions = LayoutOptions.Center };
             VerticalStackLayout _signUpPasswordLayout = new VerticalStackLayout { Spacing = 4, Children = { _signUpPasswordBorder, _signUpPasswordErrorLabel } };
 
-            ImageButton _signUpButton = new ImageButton { Source = "enter.png", WidthRequest = 50, HeightRequest = 50, HorizontalOptions = LayoutOptions.Center };
+            ImageButton _signUpButton = new ImageButton { Source = "right.png", WidthRequest = 50, HeightRequest = 50, HorizontalOptions = LayoutOptions.Center };
             _signUpButton.Clicked += async (s, e) =>
             {
-                if (_signUpButton == null) return;
+                _signUpButton.Source = "right_pressed.png";
+                await Task.Delay(500);
+                _signUpButton.Source = "right.png";
 
                 if (_resetCodeEntry?.Text == null || _signUpEmailEntry?.Text == null || _signUpPasswordEntry?.Text == null)
                 {

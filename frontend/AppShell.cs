@@ -12,7 +12,7 @@ namespace frontend
             // LOGIN
             var loginPage = new ShellContent
             {
-                ContentTemplate = new DataTemplate(typeof(AuthPage)),
+                ContentTemplate = new DataTemplate(typeof(ChatPage)),
                 Route = "MainPage"
             };
             Shell.SetNavBarIsVisible(loginPage, false);
