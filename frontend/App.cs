@@ -5,6 +5,7 @@ namespace frontend
 {
     public class App : Application
     {
+        private readonly User? _user;
         public App()
         {
             Resources = new ResourceDictionary
@@ -25,7 +26,7 @@ namespace frontend
 
             var baseUrl = config["HTTPS_URL"];
             if (string.IsNullOrWhiteSpace(baseUrl))
-                throw new InvalidOperationException("No HTTPS_URL set in appsettings.json.");
+                throw new InvalidOperationException("No HTTPS_URL set in appsettings");
 
             BaseClient.Initialize(baseUrl: baseUrl);
         }

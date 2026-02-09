@@ -11,13 +11,13 @@ public class ChatPage : ContentPage
         public string Text { get; set; } = "";
     }
 
-    Dictionary<string, List<ChatMessage>> conversationBuffers = new();
-    Dictionary<string, Border> openedChatPanels = new();
+    Dictionary<string, List<ChatMessage>> _conversationBuffers = new();
+    Dictionary<string, Border> _openedChatPanels = new();
 
     string? _activeConversation;
-    CollectionView conversationsList; // referencja
+    CollectionView _conversationsList;
 
-    HorizontalStackLayout openedChatsLayout;
+    HorizontalStackLayout _openedChatsLayout;
 
     public ChatPage()
     {
@@ -34,7 +34,7 @@ public class ChatPage : ContentPage
         optionsButton.Clicked += async (_, __) =>
         {
             optionsButton.Source = "options_pressed.png";
-            await Task.Delay(500);
+            await Task.Delay(100);
             optionsButton.Source = "options.png";
 
             string action = await DisplayActionSheetAsync(
@@ -47,45 +47,46 @@ public class ChatPage : ContentPage
         var profileRow = new Grid { Padding = 12, ColumnSpacing = 12, IsClippedToBounds = true, 
             ColumnDefinitions =
             {
-                new ColumnDefinition { Width = GridLength.Auto }, // avatar
-                new ColumnDefinition { Width = GridLength.Star }, // username
-                new ColumnDefinition { Width = GridLength.Auto }  // options
+                new ColumnDefinition { Width = GridLength.Auto },
+                new ColumnDefinition { Width = GridLength.Star },
+                new ColumnDefinition { Width = GridLength.Auto }
             }
         };
         profileRow.Add(avatar, 0, 0);
         profileRow.Add(username, 1, 0);
         profileRow.Add(optionsButton, 2, 0);
 
-        Entry searchConv = new Entry { Placeholder = "Search", TextColor = Colors.White, FontFamily = "Retro", BackgroundColor = Colors.Transparent };
+        Entry searchConv = new Entry { Placeholder = "Search or Add", TextColor = Colors.White, FontFamily = "Retro", BackgroundColor = Colors.Transparent };
         ImageButton searchorAddButton = new ImageButton { Source = "enter.png", HeightRequest = 24, WidthRequest = 24, BackgroundColor = Colors.Transparent };
-
-        var searchRow = new Grid
+        searchorAddButton.Clicked += async (_, __) =>
         {
-            Padding = 12,
-            ColumnSpacing = 12,
-            IsClippedToBounds = true,
+            searchorAddButton.Source = "enter_pressed.png";
+            await Task.Delay(100);
+            searchorAddButton.Source = "enter.png";
+        };
+
+        var searchRow = new Grid { Padding = 12,ColumnSpacing = 12,IsClippedToBounds = true,
             ColumnDefinitions =
             {
-                new ColumnDefinition { Width = GridLength.Auto }, // avatar
-                new ColumnDefinition { Width = GridLength.Star }, // username
-                new ColumnDefinition { Width = GridLength.Auto }  // options
+                new ColumnDefinition { Width = GridLength.Auto },
+                new ColumnDefinition { Width = GridLength.Star },
+                new ColumnDefinition { Width = GridLength.Auto }
             }
         };
         searchRow.Add(searchConv, 1, 0);
         searchRow.Add(searchorAddButton, 2, 0);
+#if WINDOWS
+        optionsButton.EnableHoverCursor(CursorIcon.Hand);
+        searchorAddButton.EnableHoverCursor(CursorIcon.Hand);
+#endif
 
-        conversationsList = new CollectionView
+        _conversationsList = new CollectionView
         {
             ItemsSource = new[] { "Alice", "Bob", "Charlie", "Dev Team" },
             SelectionMode = SelectionMode.Single,
             ItemTemplate = new DataTemplate(() =>
             {
-                var label = new Label
-                {
-                    FontFamily = "Retro",
-                    TextColor = Colors.White,
-                    Padding = 12
-                };
+                var label = new Label { FontFamily = "Retro", TextColor = Colors.White, Padding = 12 };
                 label.SetBinding(Label.TextProperty, ".");
 
                 return new Border
@@ -95,22 +96,25 @@ public class ChatPage : ContentPage
                     Margin = new Thickness(6, 4),
                     Content = label
                 };
-            })
+            }),
         };
-        conversationsList.SelectionChanged += OnConversationSelected;
+#if WINDOWS
+        _conversationsList.EnableHoverCursor(CursorIcon.Hand);
+#endif
+        _conversationsList.SelectionChanged += OnConversationSelected;
 
         var leftPanel = new VerticalStackLayout
         {
             WidthRequest = 260,
             BackgroundColor = Color.FromArgb("#181818"),
-            Children = { profileRow, searchRow, conversationsList }
+            Children = { profileRow, searchRow, _conversationsList }
         };
 
         // ===========
         // RIGHT PANEL
         // ===========
-        openedChatsLayout = new HorizontalStackLayout { Spacing = 12 };
-        var openedChatsScroll = new ScrollView{ Orientation = ScrollOrientation.Horizontal,Content = openedChatsLayout };
+        _openedChatsLayout = new HorizontalStackLayout { Spacing = 12, Padding = 12 };
+        var openedChatsScroll = new ScrollView{ Orientation = ScrollOrientation.Horizontal,Content = _openedChatsLayout };
 
         // ===========
         // ROOT GRID
@@ -136,7 +140,7 @@ public class ChatPage : ContentPage
 
         var messagesLayout = new VerticalStackLayout { Spacing = 8, Padding = 12 };
         var messagesScroll = new ScrollView{ Content = messagesLayout };
-        var messageEntry = new Entry {Placeholder = "Type a message...",FontFamily = "Retro",TextColor = Colors.White,PlaceholderColor = Colors.Gray,BackgroundColor = Color.FromArgb("#1E1E1E")};
+        var messageEntry = new Entry {Placeholder = "Type a message...", HorizontalOptions = LayoutOptions.Fill, FontFamily = "Retro",TextColor = Colors.White,PlaceholderColor = Colors.Gray,BackgroundColor = Color.FromArgb("#1E1E1E")};
 
         var sendButton = new Button{Text = "Send",FontFamily = "Retro",BackgroundColor = Color.FromArgb("#4F46E5"),TextColor = Colors.White};
         sendButton.Clicked += async (_, __) =>
@@ -146,13 +150,18 @@ public class ChatPage : ContentPage
 
             ChatMessage msg = new ChatMessage { Author = "You", Text = messageEntry.Text };
 
-            conversationBuffers[conversation].Add(msg);
+            _conversationBuffers[conversation].Add(msg);
             messageEntry.Text = string.Empty;
 
             await AddMessageAnimated(messagesLayout, messagesScroll, msg.Author, msg.Text);
         };
 
-        var inputRow = new HorizontalStackLayout{Padding = 8,Spacing = 8,Children = { messageEntry, sendButton }};
+        var inputRow = new Grid
+        {
+            ColumnDefinitions = { new ColumnDefinition { Width = GridLength.Star }, new ColumnDefinition { Width = GridLength.Auto } }
+        };
+        inputRow.Add(messageEntry, 0, 0);
+        inputRow.Add(sendButton, 1, 0);
 
         var closeBuffer = new ImageButton{Source = "exit.png",HeightRequest = 24,WidthRequest = 24,BackgroundColor = Colors.Transparent,HorizontalOptions = LayoutOptions.End,VerticalOptions = LayoutOptions.Center};
         closeBuffer.Clicked += async (_, __) =>
@@ -161,18 +170,22 @@ public class ChatPage : ContentPage
             await Task.Delay(100);
             closeBuffer.Source = "exit.png";
 
-            if (openedChatPanels.TryGetValue(conversation, out Border? panel))
+            if (_openedChatPanels.TryGetValue(conversation, out Border? panel))
             {
-                openedChatsLayout.Children.Remove(panel);
-                openedChatPanels.Remove(conversation);
+                _openedChatsLayout.Children.Remove(panel);
+                _openedChatPanels.Remove(conversation);
 
                 if (_activeConversation == conversation)
                 {
                     _activeConversation = null;
-                    conversationsList.SelectedItem = null;
+                    _conversationsList.SelectedItem = null;
                 }
             }
         };
+#if WINDOWS
+        closeBuffer.EnableHoverCursor(CursorIcon.Hand);
+        sendButton.EnableHoverCursor(CursorIcon.Hand);
+#endif
 
         var headerRow = new HorizontalStackLayout{Padding = new Thickness(12, 0),Spacing = 6,VerticalOptions = LayoutOptions.Center,HorizontalOptions = LayoutOptions.Center};
         headerRow.Children.Add(chatTitle);
@@ -189,13 +202,10 @@ public class ChatPage : ContentPage
             BackgroundColor = Colors.Transparent
         };
 
-        var chatPanel = new Border{StrokeShape = new RoundRectangle { CornerRadius = 16 },BackgroundColor = Color.FromArgb("#1E1E1E"),Padding = 0, StrokeThickness = 2, Stroke = Colors.Transparent, Content = chatPanelGrid};
+        var chatPanel = new Border{ WidthRequest = 250, StrokeShape = new RoundRectangle { CornerRadius = 16 },BackgroundColor = Color.FromArgb("#1E1E1E"),Padding = 0, StrokeThickness = 2, Stroke = Colors.Transparent, Content = chatPanelGrid};
 
         var tap = new TapGestureRecognizer();
-        tap.Tapped += (_,__) =>
-        {
-            SetActiveConversation(conversation);
-        };
+        tap.Tapped += (_,__) => { SetActiveConversation(conversation); };
         chatPanel.GestureRecognizers.Add(tap);
 
         chatPanelGrid.Add(headerRow, 0, 0);
@@ -203,9 +213,9 @@ public class ChatPage : ContentPage
         chatPanelGrid.Add(inputRow, 0, 2);
 
         // Render existing messages from buffer
-        if (conversationBuffers.ContainsKey(conversation))
+        if (_conversationBuffers.ContainsKey(conversation))
         {
-            foreach (var msg in conversationBuffers[conversation])
+            foreach (var msg in _conversationBuffers[conversation])
                 messagesLayout.Children.Add(CreateStaticBubble(msg.Author, msg.Text));
         }
 
@@ -216,16 +226,13 @@ public class ChatPage : ContentPage
     {
         _activeConversation = conversation;
 
-        //  Podœwietlenie paneli czatu
-        foreach (var kv in openedChatPanels)
+        foreach (var kv in _openedChatPanels)
             kv.Value.Stroke = Colors.Transparent;
 
-        if (openedChatPanels.TryGetValue(conversation, out var panel))
+        if (_openedChatPanels.TryGetValue(conversation, out var panel))
             panel.Stroke = Color.FromArgb("#4F46E5");
 
-        // Zaznaczenie w lewym panelu
-
-        conversationsList.SelectedItem = conversation;
+        _conversationsList.SelectedItem = conversation;
     }
 
     View CreateStaticBubble(string author, string text)
@@ -271,14 +278,14 @@ public class ChatPage : ContentPage
         if (e.CurrentSelection.FirstOrDefault() is not string name)
             return;
 
-        if (!conversationBuffers.ContainsKey(name))
-            conversationBuffers[name] = new List<ChatMessage>();
+        if (!_conversationBuffers.ContainsKey(name))
+            _conversationBuffers[name] = new List<ChatMessage>();
 
-        if (!openedChatPanels.ContainsKey(name))
+        if (!_openedChatPanels.ContainsKey(name))
         {
             var panel = CreateChatPanel(name);
-            openedChatPanels[name] = panel;
-            openedChatsLayout.Children.Add(panel);
+            _openedChatPanels[name] = panel;
+            _openedChatsLayout.Children.Add(panel);
         }
 
         SetActiveConversation(name);
