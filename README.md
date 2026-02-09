@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> All rights to the assets belong to their respective authors.
+
 <div align="center">
   
 ## Dependencies
