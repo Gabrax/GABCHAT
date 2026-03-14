@@ -1,6 +1,12 @@
 > [!IMPORTANT]
 > All rights to the assets belong to their respective authors.
 
+```bash
+dotnet new sln -n <sln-name>
+dotnet sln add frontend/frontend.csproj
+dotnet sln add backend/backend.csproj
+```
+
 <div align="center">
   
 ## Dependencies

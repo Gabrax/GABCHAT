@@ -10,8 +10,6 @@ namespace frontend
 {
     public class AuthPage : ContentPage
     {
-        private readonly MediaElement _backgroundVideo;
-
         private readonly VerticalStackLayout _loginLayout;
         private readonly VerticalStackLayout _signUpLayout;
         private readonly VerticalStackLayout _passwordResetLayout;
@@ -19,7 +17,7 @@ namespace frontend
         {
             Shell.SetBackButtonBehavior(this, new BackButtonBehavior { IsVisible = false, IsEnabled = false });
 
-            _backgroundVideo = new MediaElement
+            var backgroundVideo = new MediaElement
             {
                 ShouldAutoPlay = true,
                 ShouldLoopPlayback = true,
@@ -39,8 +37,8 @@ namespace frontend
                 using (var fileStream = File.Create(filePath))
                     await stream.CopyToAsync(fileStream);
 
-                _backgroundVideo.Source = MediaSource.FromFile(filePath);
-                _backgroundVideo.Play();
+                backgroundVideo.Source = MediaSource.FromFile(filePath);
+                backgroundVideo.Play();
             };
 
             _loginLayout = CreateLoginLayout();
@@ -57,7 +55,7 @@ namespace frontend
             {
                 Children =
                 {
-                    _backgroundVideo,
+                    backgroundVideo,
                     _loginLayout,
                     _signUpLayout,
                     _passwordResetLayout
