@@ -2,9 +2,12 @@
 > All rights to the assets belong to their respective authors.
 
 ```bash
-dotnet new sln -n <sln-name>
-dotnet sln add frontend/frontend.csproj
-dotnet sln add backend/backend.csproj
+docker compose -f backend/database/docker-compose.yml up -d
+dotnet run --project backend/backend.csproj
+
+py -m venv frontend/venv
+./frontend/venv/Scripts/activate.bat 
+py frontend/frontend.py
 ```
 
 <div align="center">
