@@ -6,8 +6,10 @@ docker compose -f backend/database/docker-compose.yml up -d
 dotnet run --project backend/backend.csproj
 
 py -m venv frontend/venv
-./frontend/venv/Scripts/activate.bat 
+./frontend/venv/Scripts/activate.bat
+pip install flet
 py frontend/frontend.py
+deactivate
 ```
 
 <div align="center">
