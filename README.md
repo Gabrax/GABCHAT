@@ -1,41 +1,69 @@
-> [!IMPORTANT]
-> All rights to the assets belong to their respective authors.
+A complete local chat application with a Flet frontend, an ASP.NET Core API,
+and a MySQL database.
 
-```bash
+## Features
+
+- registration, sign-in, and securely hashed passwords,
+- user search by username or email address,
+- adding and removing contacts,
+- online/offline status and last activity time,
+- profile pictures,
+- text messages and images in conversations,
+- message read receipts,
+- automatic conversation and presence updates.
+
+## Requirements
+
+- Docker Desktop,
+- .NET SDK 10,
+- Python 3.11 or newer.
+
+## Running the application
+
+Start the database from the project directory:
+
+```powershell
 docker compose -f backend/database/docker-compose.yml up -d
-dotnet run --project backend/backend.csproj
-
-py -m venv frontend/venv
-./frontend/venv/Scripts/activate.bat 
-py frontend/frontend.py
 ```
 
-<div align="center">
-  
-## Dependencies
+Then start the API (available at `http://localhost:5046` by default):
 
-</div>
+```powershell
+dotnet run --project backend/backend.csproj --launch-profile http
+```
 
-<div align="center">
+Prepare and start the frontend in a second terminal:
 
-<p>
-<a href="https://dotnet.microsoft.com/en-us/apps/maui">.NET MAUI</a> •
-<a href="https://www.nuget.org/packages/CommunityToolkit.Maui/14.0.0?_src=template">CommunityToolkit.Maui</a> •
-<a href="https://dotnet.microsoft.com/en-us/apps/aspnet/apis">ASP.NET Web API</a> •
-<a href="https://www.nuget.org/packages/Microsoft.AspNetCore.OpenApi/10.0.2?_src=template">Microsoft.AspNetCore.OpenApi</a> •
-<a href="https://scalar.com/products/api-references/integrations/aspnetcore/integration">Scalar.AspNetCore</a> •
-<a href="https://www.nuget.org/packages/microsoft.entityframeworkcore">Microsoft.EntityFrameworkCore</a> •
-<a href="https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Tools">Microsoft.EntityFrameworkCore.Tools</a> •
-<a href="https://www.nuget.org/packages/Microsoft.Extensions.Configuration.Json/10.0.2?_src=template">Microsoft.Extensions.Configuration.Json</a> •
-<a href="https://www.nuget.org/packages/Microsoft.Extensions.Configuration.Binder/10.0.2?_src=template">Microsoft.Extensions.Configuration.Binder</a> •
-<a href="https://www.nuget.org/packages/BCrypt.Net-Next/4.0.3?_src=template">BCrypt.Net-Next</a> •
-<a href="https://www.docker.com/">Docker</a> •
-<a href="https://www.mysql.com/">MySQL</a> •
-<a href="https://www.nuget.org/packages/MySql.EntityFrameworkCore">MySql.EntityFrameworkCore</a> •
-<a href="https://redis.io/">Redis</a> •
-<a href="https://www.nuget.org/packages/stackexchange.redis">StackExchange.Redis</a> •
-<a href="https://www.nuget.org/packages/Microsoft.Extensions.Caching.StackExchangeRedis">Microsoft.Extensions.Caching.StackExchangeRedis</a>
-</p>
+```powershell
+python -m venv frontend/.venv
+frontend/.venv/Scripts/Activate.ps1
+pip install -r frontend/requirements.txt
+python frontend/frontend.py
+```
 
-</div>
+The frontend opens in a web browser by default. This avoids downloading an
+additional Flet client on first launch.
 
+To use an optional native window instead, run:
+
+```powershell
+$env:GABCHAT_DESKTOP = "1"
+python frontend/frontend.py
+```
+
+Flet must download its desktop client the first time this mode is used.
+
+When changing the Python version, recreate `.venv` from scratch. Do not run
+`python -m venv` over an environment created with another Python version,
+because incompatible binary modules may remain in it.
+
+If the API is available at another address, set this variable before starting
+the frontend:
+
+```powershell
+$env:GABCHAT_API_URL = "http://localhost:5046"
+```
+
+JPG, PNG, WEBP, and GIF images are stored in `backend/uploads`. Each file can
+be up to 8 MB. On startup, the backend automatically adds any missing tables
+and columns to an existing database.

@@ -19,13 +19,13 @@ echo [MySQL] Backup before shutdown...
 
 docker exec mysql-db mysqldump -u chatuser -pchatpass chatdb -r /tmp/mysql_dump.sql
 IF %ERRORLEVEL% NEQ 0 (
-    echo BLAD: Dump MySQL failure!
+    echo ERROR: MySQL dump failed!
     goto shutdown
 )
 
 docker cp mysql-db:/tmp/mysql_dump.sql %MYSQL_BACKUP%
 IF %ERRORLEVEL% NEQ 0 (
-    echo BLAD: Copying MySQL dump failure!
+    echo ERROR: Failed to copy the MySQL dump!
 )
 
 REM ======================
@@ -36,13 +36,13 @@ echo [Redis] Backup before shutdown...
 
 docker exec redis-cache redis-cli SAVE
 IF %ERRORLEVEL% NEQ 0 (
-    echo BLAD: Redis SAVE failure!
+    echo ERROR: Redis SAVE failed!
     goto shutdown
 )
 
 docker cp redis-cache:/data/dump.rdb %REDIS_BACKUP%
 IF %ERRORLEVEL% NEQ 0 (
-    echo BLAD: Copying Redis dump failure!
+    echo ERROR: Failed to copy the Redis dump!
 )
 
 REM ======================

@@ -148,3 +148,15 @@ $RECYCLE.BIN/
 .DS_Store
 
 _NCrunch*
+
+# Python / local runtime
+__pycache__/
+*.py[cod]
+.venv/
+.venv-broken-*/
+venv/
+.dotnet-home/
+
+# Uploaded media (keep directory placeholder only)
+backend/uploads/*
+!backend/uploads/.gitkeep

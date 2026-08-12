@@ -47,7 +47,7 @@ if exist %REDIS_BACKUP% (
 )
 
 REM ======================
-REM START SYSTEMU
+REM START SYSTEM
 REM ======================
 echo.
 echo [System] LAUNCHING DOCKER CONTAINERS...
